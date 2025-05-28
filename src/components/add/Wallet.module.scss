@@ -1,0 +1,132 @@
+@use "@/styles/variables"as *;
+
+.wallets {
+  margin-top: 24px;
+  color: #fff;
+  //border-top: 1px solid white;
+
+  @media (min-width: $desktop) {
+    margin-top: 0;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__list {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+  }
+
+  &__item {
+    appearance: none;
+    background: none;
+    border: 1px rgba(255, 255, 255, .6) solid;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 16px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .3s ease all;
+
+    &:hover {
+      background: rgba(255, 255, 255, .1);
+      transition: .3s ease all;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    }
+
+    &_data {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+
+    }
+
+    &_selected {
+      justify-content: stretch;
+      display: grid;
+      background: rgba(255, 255, 255, .1);
+      transition: .3s ease all;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+
+      @media (min-width: $desktop) {
+        //display: flex;
+        //justify-content: space-between;
+      }
+
+    }
+
+    button {
+      padding: 8px;
+      margin-left: auto;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &__none {
+    font-size: 16px;
+    line-height: 1;
+    background: rgba(255, 255, 255, .1);
+    padding: 24px;
+    border-radius: 8px;
+
+    a,
+    a:visited {
+      color: #fff;
+      text-decoration-line: underline;
+    }
+
+
+
+  }
+
+  &__info {
+    margin: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.faucet {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 20px;
+
+  &__title {
+    margin-bottom: 4px;
+
+  }
+
+  &__link {
+    color: #fff;
+    font-weight: 600;
+    display: inline-flex;
+    gap: 4px;
+    border-bottom: 2px #fff dotted;
+
+    svg {
+      width: 16px;
+    }
+
+
+    &:hover {
+      background: rgba(255, 255, 255, .1);
+      transition: .3s ease all;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    }
+  }
+}

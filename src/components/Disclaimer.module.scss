@@ -1,0 +1,14 @@
+@use '@/styles/variables'as *;
+
+.disclaimer {
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, .1);
+  backdrop-filter: blur(4px);
+  padding: 16px;
+  border-radius: 12px;
+
+  @media (min-width: $desktop) {
+    margin-bottom: 24px;
+  }
+}

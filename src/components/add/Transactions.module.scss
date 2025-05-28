@@ -1,0 +1,51 @@
+@use '@/styles/variables'as *;
+
+.transactions {
+  margin-top: 24px;
+  padding: 24px;
+  color: #fff;
+  border-radius: 12px;
+  border: rgba(255, 255, 255, .1) solid;
+  display: grid;
+  gap: 8px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, .05);
+  backdrop-filter: blur(4px);
+
+
+
+  &__title {
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__expand {
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+
+  span {
+    display: inline-flex;
+
+  }
+}
+
+.wrapper {
+  margin-top: 24px;
+
+  @media (min-width: $desktop) {
+    max-width: 800px;
+  }
+}

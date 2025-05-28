@@ -1,0 +1,15 @@
+.error {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .1);
+  outline: 2px rgba(255, 255, 255, .2) solid;
+  outline-offset: -2px;
+  margin-bottom: 32px;
+  color: #fff;
+  display: grid;
+  grid-template-columns: 48px auto;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+}
