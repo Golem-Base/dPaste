@@ -21,7 +21,7 @@ function isFauxError(e: MMError): boolean {
   if (!e.message) {
     return false;
   }
-  return e.message.includes("f is not a function");
+  return e.message.includes("f is not a function") || e.message.includes("p is not a function");
 }
 
 // Add and switch to the GolemBase chain
