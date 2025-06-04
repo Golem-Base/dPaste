@@ -2,8 +2,14 @@ import { BLOCK_INTERVAL, CHAIN_ID, RPC_ENDPOINT_URL, RPC_ENDPOINT_URL_WS } from 
 import { createClient, EntityMetaData, GolemBaseClient, Hex } from "golem-base-sdk";
 import Browser from "hex-encoding";
 import { Note } from "./note";
+import { z } from "zod/v4";
+import { GetTransactionReceiptResponse } from "@/lib/metamask";
 
 const DUMMY_PRIVATE_KEY = Browser.decode("08320436da8db8a206e77a918387b8f46afbad57993a5a4bf5bf3ac85bcad74b");
+const GetCurrentBlockNumberResponse = z.object({
+  number: z.string()
+});
+type GetCurrentBlockNumberResponse = z.infer<typeof GetCurrentBlockNumberResponse>;
 
 export interface NewNoteData {
   noteId: string;
@@ -40,18 +46,13 @@ export class GolemBaseRo {
   }
 
   async getCurrentBlockNumber(): Promise<number> {
-    const res = await this.client
+    const res = GetCurrentBlockNumberResponse.parse(await this.client
       .getRawClient()
       .httpClient
       .request({
         method: "eth_getBlockByNumber",
         params: ["latest", false],
-      });
-
-    if (!(res instanceof Object) || !("number" in res) ||
-      typeof res.number !== "string") {
-      throw new Error("Could not get current block number");
-    }
+      }));
     return Number(res.number);
   }
 
@@ -62,16 +63,7 @@ export class GolemBaseRo {
     return new Date(Date.now() + (ttlSecs * 1000));
   }
 
-  async parseReceipt(receipt: unknown): Promise<NewNoteData> {
-    console.debug("Receipt:", receipt);
-    if (!(receipt instanceof Object) || !("logs" in receipt) ||
-      !Array.isArray(receipt.logs) || receipt.logs.length < 1 ||
-      !(receipt.logs[0] instanceof Object) || !("topics" in receipt.logs[0]) ||
-      !Array.isArray(receipt.logs[0].topics) || receipt.logs[0].topics.length < 2 ||
-      typeof receipt.logs[0].topics[1] !== "string" || receipt.logs[0].topics[1] === "") {
-      console.error("Invalid receipt:", receipt);
-      throw new Error("Could not add note to blockchain");
-    }
+  async parseReceipt(receipt: GetTransactionReceiptResponse): Promise<NewNoteData> {
     const noteId = receipt.logs[0].topics[1];
     const expirationBlock = Number(receipt.logs[0].data);
     const expirationDate = await this.estimateBlockDate(expirationBlock);

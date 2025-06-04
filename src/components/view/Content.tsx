@@ -11,6 +11,7 @@ export type State =
   | { type: "loading" }
   | { type: "encrypted"; note: Note }
   | { type: "success"; note: Note }
+  | { type: "error" }
   | { type: "missing" };
 
 interface Attrs {
@@ -33,11 +34,7 @@ export default function Content({ id, state, setState, setError }: Attrs) {
       console.debug("Note decrypted successfully!", state.note);
       setState({ type: "success", note: state.note });
     } catch (e) {
-      console.error("Decrypt error:", e);
-      // const error =
-      //   (e instanceof Error || (e instanceof Object && "message" in e))
-      //     && typeof e.message === "string"
-      //     ? e.message : JSON.stringify(e);
+      console.error("Decryption error:", e);
       setError("Decrypting note failed.");
     }
   }
@@ -46,6 +43,8 @@ export default function Content({ id, state, setState, setError }: Attrs) {
       return (<div>Loading... </div>);
     case "missing":
       return (<p>Note {id} is missing</p>);
+    case "error":
+      return (<></>);
     case "encrypted":
       return (
         <div className={styles.note}>

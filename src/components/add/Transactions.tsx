@@ -3,7 +3,8 @@ import { GolemBaseRo } from "@/lib/golem-base";
 import { TxState, loadTransactions, setCompleted } from "@/lib/transactions";
 import styles from "./Transactions.module.scss";
 import { DATE_FORMAT_OPTIONS } from "@/lib/config";
-
+import { z } from "zod/v4";
+import { metamask } from "@/lib/metamask";
 interface Attrs {
   walletId: string;
   provider: EIP1193Provider | undefined;
@@ -22,13 +23,10 @@ export default function Transactions({ walletId, provider }: Attrs) {
         for (const txId in userTransactions) {
           if (userTransactions[txId].type === "pending") {
             const fut = async () => {
-              const receipt = await provider.request({
-                method: "eth_getTransactionReceipt",
-                params: [txId],
-              });
-
+              const receipt = await metamask.getTransactionReceipt(provider, txId);
               const golemBase = await GolemBaseRo.newRo();
               const { noteId, expirationDate } = await golemBase.parseReceipt(receipt);
+              console.debug("Resolved transaction", txId, "from wallet", walletId, "for note", noteId, "which expires at", expirationDate);
               await setCompleted(walletId, txId, noteId, expirationDate);
             };
 
@@ -46,7 +44,6 @@ export default function Transactions({ walletId, provider }: Attrs) {
       }
     }
   }
-
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
@@ -70,7 +67,6 @@ export default function Transactions({ walletId, provider }: Attrs) {
             <div className={styles.transactions}>
               {transactionsArray.map((entry: { txId: string; txState: TxState }, key) => {
                 const shortId = `${entry.txId.substring(0, 10)}..${entry.txId.substring(54)}`;
-                console.log(entry);
                 if (entry.txState.type === "pending") {
                   return (
                     <div className={styles.transaction} key={key}>

@@ -3,7 +3,7 @@ import {
   APP_ID, KEY_APP_ID, KEY_PASTE_CREATED_AT, KEY_PASTE_ENCRYPTED,
   KEY_PASTE_LANGUAGE, KEY_PASTE_VERSION, PASTE_VERSION,
 } from "./config";
-import { KVPair } from "./util";
+import { KVPair } from "@/lib/utils";
 
 export enum ValidationError {
   InvalidVersion,
