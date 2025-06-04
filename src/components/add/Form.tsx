@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import { CustomActionsProps, useConfirm } from '@omit/react-confirm-dialog'
 import { FEATURE_ENCRYPTION_ENABLED, BLOCK_INTERVAL, CHAIN_ID, MAX_NOTE_SIZE } from "@/lib/config";
 import { Language, LANGUAGES } from "@/lib/language";
 import { Note } from "@/lib/note";
@@ -36,8 +37,9 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   const [isFocused, setIsFocused] = useState(false);
   const [enableEncryption, setEnableEncryption] = useState(false);
   const [code, setCode] = useState("");
+  const confirm = useConfirm();
 
-  async function addNote(data: FormData) {
+  const addNote = async (data: FormData) => {
     try {
       const value = data.get("value");
       const ttls = data.get("ttl");
@@ -93,6 +95,22 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
         throw new Error("No wallet selected");
       }
 
+      const isConfirmed = await confirm({
+        title: 'Confirmation',
+        description: 'Are you sure you want to submit this note?',
+        customActions: ({ confirm, cancel }: CustomActionsProps) => (
+          <div>
+            <button onClick={confirm}>Submit</button>
+            <button onClick={cancel}>Cancel</button>
+          </div>
+        )
+      })
+
+      if (!isConfirmed) {
+        console.debug('Submit cancelled by user');
+        return;
+      }
+
       console.debug("Using account", userAccount);
       const resSwitch = await wallet.provider.request({
         method: "wallet_switchEthereumChain",
@@ -112,7 +130,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
       console.error("Add note error:", e);
       const err =
         (e instanceof Error || (e instanceof Object && "message" in e)) &&
-        typeof e.message === "string"
+          typeof e.message === "string"
           ? e.message
           : JSON.stringify(e);
       setError(err);
