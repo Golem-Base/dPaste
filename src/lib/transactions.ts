@@ -2,31 +2,31 @@ import { z } from "zod/v4";
 
 const TRANSACTIONS_LOCAL_STORAGE_KEY = "transactions";
 
-const TxState = z.union([
+const TxStateSchema = z.union([
   z.object({
-    type: z.literal("pending")
+    type: z.literal("pending"),
   }),
   z.object({
     type: z.literal("complete"),
     noteId: z.string(),
-    expirationDate: z.string()
-  })
+    expirationDate: z.string(),
+  }),
 ]);
-export type TxState = z.infer<typeof TxState>;
+export type TxState = z.infer<typeof TxStateSchema>;
 
 // tx-id -> TxState
-const UserTransactions = z.record(z.string(), TxState);
-export type UserTransactions = z.infer<typeof UserTransactions>;
+const UserTransactionsSchema = z.record(z.string(), TxStateSchema);
+export type UserTransactions = z.infer<typeof UserTransactionsSchema>;
 
 // wallet-id -> UserTransactions
-const TransactionList = z.record(z.string(), UserTransactions);
-const TransactionListFromJsonString = z.preprocess((value: any, ctx) => JSON.parse(value), TransactionList);
-export type TransactionList = z.infer<typeof TransactionList>;
-export type TransactionListFromJsonString = z.infer<typeof TransactionListFromJsonString>;
+const TransactionListSchema = z.record(z.string(), UserTransactionsSchema);
+const TransactionListFromJsonStringSchema = z.preprocess((value: any, _ctx) => JSON.parse(value), TransactionListSchema);
+export type TransactionList = z.infer<typeof TransactionListSchema>;
+export type TransactionListFromJsonString = z.infer<typeof TransactionListFromJsonStringSchema>;
 
 export function loadTransactions(): TransactionList {
   try {
-    const transactions = TransactionListFromJsonString.parse(localStorage.getItem(TRANSACTIONS_LOCAL_STORAGE_KEY));
+    const transactions = TransactionListFromJsonStringSchema.parse(localStorage.getItem(TRANSACTIONS_LOCAL_STORAGE_KEY));
     return transactions;
   } catch (e) {
     console.error(e);
@@ -43,7 +43,7 @@ export function setPending(walletId: string, txId: string) {
   localStorage.setItem(TRANSACTIONS_LOCAL_STORAGE_KEY, JSON.stringify(transactions));
 }
 
-export function setCompleted(walletId: string, txId: string, noteId: string, expirationDate: Date) {
+export function setCompleted(walletId: string, txId: string, noteId: string, expirationDate: string) {
   const transactions = loadTransactions();
   if (!(walletId in transactions)) {
     transactions[walletId] = {};

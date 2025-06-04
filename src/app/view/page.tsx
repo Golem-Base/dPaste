@@ -52,7 +52,8 @@ function NoteView() {
         console.error("getEntity error:", err);
 
         switch (err.error?.code) {
-          case -32000 | -32602:
+          case -32000:
+          case -32602:
             setError("Note expired or invalid ID provided");
             setState({ type: "missing" });
             return;
@@ -62,7 +63,7 @@ function NoteView() {
         }
       });
 
-      console.debug("Note ID:", id);
+    console.debug("Note ID:", id);
   }, [id]);
 
   if (typeof id !== "string" || id === "") {

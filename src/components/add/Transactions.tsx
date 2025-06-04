@@ -3,7 +3,6 @@ import { GolemBaseRo } from "@/lib/golem-base";
 import { TxState, loadTransactions, setCompleted } from "@/lib/transactions";
 import styles from "./Transactions.module.scss";
 import { DATE_FORMAT_OPTIONS } from "@/lib/config";
-import { z } from "zod/v4";
 import { metamask } from "@/lib/metamask";
 interface Attrs {
   walletId: string;
@@ -27,7 +26,7 @@ export default function Transactions({ walletId, provider }: Attrs) {
               const golemBase = await GolemBaseRo.newRo();
               const { noteId, expirationDate } = await golemBase.parseReceipt(receipt);
               console.debug("Resolved transaction", txId, "from wallet", walletId, "for note", noteId, "which expires at", expirationDate);
-              await setCompleted(walletId, txId, noteId, expirationDate);
+              await setCompleted(walletId, txId, noteId, expirationDate.toString());
             };
 
             fut();

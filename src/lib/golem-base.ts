@@ -6,10 +6,9 @@ import { z } from "zod/v4";
 import { GetTransactionReceiptResponse } from "@/lib/metamask";
 
 const DUMMY_PRIVATE_KEY = Browser.decode("08320436da8db8a206e77a918387b8f46afbad57993a5a4bf5bf3ac85bcad74b");
-const GetCurrentBlockNumberResponse = z.object({
-  number: z.string()
+const GetCurrentBlockNumberResponseSchema = z.object({
+  number: z.string(),
 });
-type GetCurrentBlockNumberResponse = z.infer<typeof GetCurrentBlockNumberResponse>;
 
 export interface NewNoteData {
   noteId: string;
@@ -46,7 +45,7 @@ export class GolemBaseRo {
   }
 
   async getCurrentBlockNumber(): Promise<number> {
-    const res = GetCurrentBlockNumberResponse.parse(await this.client
+    const res = GetCurrentBlockNumberResponseSchema.parse(await this.client
       .getRawClient()
       .httpClient
       .request({

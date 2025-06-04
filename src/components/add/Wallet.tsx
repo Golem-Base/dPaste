@@ -5,8 +5,7 @@ import styles from "./Wallet.module.scss";
 import layout from "@/styles/Layout.module.scss";
 import Image from "next/image";
 import Disclaimer from "@/components/Disclaimer";
-import { z } from "zod/v4";
-import { metamask, Currency } from "@/lib/metamask";
+import { metamask } from "@/lib/metamask";
 
 interface Attrs {
   setError: (error: string) => void;
@@ -16,11 +15,6 @@ interface Attrs {
   setUserAccount: (user: string) => void;
 }
 
-const RpcRequestAccountsResponse = z.array(z.string());
-type RpcRequestAccountsResponse = z.infer<typeof RpcRequestAccountsResponse>;
-
-const RpcAddEthereumChainResponse = z.array(z.string());
-type RpcAddEthereumChainResponse = z.infer<typeof RpcAddEthereumChainResponse>;
 // Detect immaterial metamask error
 //
 // See https://github.com/MetaMask/metamask-sdk/issues/1272
@@ -42,9 +36,9 @@ async function ensureGolemBaseChain(provider: EIP1193Provider) {
       nativeCurrency: {
         decimals: 18,
         name: CURRENCY_NAME,
-        symbol: CURRENCY_SYMBOL
+        symbol: CURRENCY_SYMBOL,
       },
-      rpcUrls: [RPC_ENDPOINT_URL]
+      rpcUrls: [RPC_ENDPOINT_URL],
     });
 
     await metamask.switchEthereumChain(provider, CHAIN_ID);
