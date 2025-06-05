@@ -1,7 +1,6 @@
 // import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState, useTransition } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { CustomActionsProps, useConfirm } from '@omit/react-confirm-dialog'
 import { FEATURE_ENCRYPTION_ENABLED, BLOCK_INTERVAL, CHAIN_ID, MAX_NOTE_SIZE } from "@/lib/config";
@@ -38,6 +37,8 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   const [enableEncryption, setEnableEncryption] = useState(false);
   const [code, setCode] = useState("");
   const confirm = useConfirm();
+
+  const [isPending, startTransition] = useTransition();
 
   const addNote = async (data: FormData) => {
     try {
@@ -95,7 +96,8 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
         throw new Error("No wallet selected");
       }
 
-      const isConfirmed = await confirm({
+      // The confirmation must be started before entering the transition
+      const isConfirmedPromise = confirm({
         title: 'Confirmation',
         description: 'Are you sure you want to submit this note?',
         customActions: ({ confirm, cancel }: CustomActionsProps) => (
@@ -106,26 +108,40 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
         )
       })
 
-      if (!isConfirmed) {
-        console.debug('Submit cancelled by user');
-        return;
-      }
+      // Only enter the pending state after all preliminary checks are done so as to avoid
+      // flasing the spinner UI on empty notes etc.
+      startTransition(async () => {
+        try {
+          if (!await isConfirmedPromise) {
+            console.debug('Submit cancelled by user');
+            return;
+          }
 
-      console.debug("Using account", userAccount);
-      const resSwitch = await wallet.provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: CHAIN_ID }],
-      });
-      console.debug("Chain switch response:", resSwitch);
+          console.debug("Using account", userAccount);
+          const resSwitch = await wallet.provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: CHAIN_ID }],
+          });
+          console.debug("Chain switch response:", resSwitch);
 
-      const golemBase = await GolemBaseRw.newRw(wallet.provider);
-      const noteId = await golemBase.createNote(note, {
-        txHashCallback: (hash) => {
-          setPending(userAccount, hash);
-        },
+          const golemBase = await GolemBaseRw.newRw(wallet.provider);
+          const noteId = await golemBase.createNote(note, {
+            txHashCallback: (hash) => {
+              setPending(userAccount, hash);
+            },
+          });
+          console.debug("Created note:", noteId);
+          router.push(`/view?id=${noteId}`);
+        } catch (e) {
+          console.error("Add note error:", e);
+          const err =
+            (e instanceof Error || (e instanceof Object && "message" in e)) &&
+              typeof e.message === "string"
+              ? e.message
+              : JSON.stringify(e);
+          setError(err);
+        }
       });
-      console.debug("Created note:", noteId);
-      router.push(`/view?id=${noteId}`);
     } catch (e) {
       console.error("Add note error:", e);
       const err =
@@ -134,6 +150,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
           ? e.message
           : JSON.stringify(e);
       setError(err);
+      return;
     }
   }
 
@@ -148,6 +165,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   }
 
   const className = walletSelected ? styles.add__form : `${styles.add__form} ${styles.add__form_disabled}`;
+  const pending = isPending;
 
   return (
     <form action={addNote}>
@@ -220,15 +238,14 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
               <label className={styles.add__label}>Password:</label>
               <Input type="password" className={styles.add__input} id="password" name="password" />
             </div>}
-          {submit({ walletSelected })}
+          {submit({ pending, walletSelected })}
         </div>
       </div>
     </form>
   );
 }
 
-function submit({ walletSelected }: { walletSelected: boolean }) {
-  const { pending } = useFormStatus();
+function submit({ pending, walletSelected }: { pending: boolean, walletSelected: boolean }) {
   const disabled = pending || !walletSelected;
 
   let className;
