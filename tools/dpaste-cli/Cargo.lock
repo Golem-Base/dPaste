@@ -1400,6 +1400,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "dpaste-cli"
+version = "0.1.0"
+dependencies = [
+ "aes-gcm",
+ "alloy",
+ "alloy-rlp",
+ "chrono",
+ "clap",
+ "colored",
+ "const_format",
+ "data-encoding",
+ "k256",
+ "pbkdf2",
+ "rand 0.9.1",
+ "rand_chacha 0.9.0",
+ "reqwest",
+ "rlp 0.6.1",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tokio",
+ "xdg",
+]
+
+[[package]]
 name = "dunce"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1716,31 +1741,6 @@ name = "glob"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8d1add55171497b4705a648c6b583acafb01d58050a51727785f0b2c8e0a2b2"
-
-[[package]]
-name = "golem-paste-cli"
-version = "0.1.0"
-dependencies = [
- "aes-gcm",
- "alloy",
- "alloy-rlp",
- "chrono",
- "clap",
- "colored",
- "const_format",
- "data-encoding",
- "k256",
- "pbkdf2",
- "rand 0.9.1",
- "rand_chacha 0.9.0",
- "reqwest",
- "rlp 0.6.1",
- "serde",
- "serde_json",
- "sha2",
- "tokio",
- "xdg",
-]
 
 [[package]]
 name = "group"

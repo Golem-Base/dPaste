@@ -269,7 +269,7 @@ async fn delete_note(node_url: Url, args: DeleteArgs) {
         .with_max_fee_per_gas(0x2540be4000);
 
     let result = provider.send_transaction(tx).await.unwrap();
-    let receipt = result.get_receipt().await.unwrap();
+    let _receipt = result.get_receipt().await.unwrap();
     println!("Paste deleted successfully.");
 }
 
@@ -290,7 +290,7 @@ async fn extend_note(node_url: Url, args: ExtendArgs) {
         .with_max_fee_per_gas(0x2540be4000);
 
     let result = provider.send_transaction(tx).await.unwrap();
-    let receipt = result.get_receipt().await.unwrap();
+    let _receipt = result.get_receipt().await.unwrap();
     println!("Paste extended successfully.");
 }
 
