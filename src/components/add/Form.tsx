@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { GolemBaseRw } from "@/lib/golem-base";
 import { setPending } from "@/lib/transactions";
-import { metamask } from "@/lib/metamask";
+import { walletApi } from "@/lib/wallet-api";
 
 // const CodeEditor = dynamic(
 //   () => import("@uiw/react-textarea-code-editor").then((mod) => mod.default),
@@ -95,7 +95,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
       }
 
       console.debug("Using account", userAccount);
-      await metamask.switchEthereumChain(wallet.provider, CHAIN_ID);
+      await walletApi.switchEthereumChain(wallet.provider, CHAIN_ID);
 
       const golemBase = await GolemBaseRw.newRw(wallet.provider);
       const noteId = await golemBase.createNote(note, {

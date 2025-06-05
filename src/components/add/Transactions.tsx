@@ -3,7 +3,7 @@ import { GolemBaseRo } from "@/lib/golem-base";
 import { TxState, loadTransactions, setCompleted } from "@/lib/transactions";
 import styles from "./Transactions.module.scss";
 import { DATE_FORMAT_OPTIONS } from "@/lib/config";
-import { metamask } from "@/lib/metamask";
+import { walletApi } from "@/lib/wallet-api";
 interface Attrs {
   walletId: string;
   provider: EIP1193Provider | undefined;
@@ -22,7 +22,7 @@ export default function Transactions({ walletId, provider }: Attrs) {
         for (const txId in userTransactions) {
           if (userTransactions[txId].type === "pending") {
             const fut = async () => {
-              const receipt = await metamask.getTransactionReceipt(provider, txId);
+              const receipt = await walletApi.getTransactionReceipt(provider, txId);
               const golemBase = await GolemBaseRo.newRo();
               const { noteId, expirationDate } = await golemBase.parseReceipt(receipt);
               console.debug("Resolved transaction", txId, "from wallet", walletId, "for note", noteId, "which expires at", expirationDate);

@@ -5,7 +5,7 @@ import styles from "./Wallet.module.scss";
 import layout from "@/styles/Layout.module.scss";
 import Image from "next/image";
 import Disclaimer from "@/components/Disclaimer";
-import { metamask } from "@/lib/metamask";
+import { walletApi } from "@/lib/wallet-api";
 
 interface Attrs {
   setError: (error: string) => void;
@@ -30,7 +30,7 @@ function isFauxError(e: MMError): boolean {
 // Debug-logs results. Doesn't propagate faux errors.
 async function ensureGolemBaseChain(provider: EIP1193Provider) {
   try {
-    await metamask.addEthereumChain(provider, {
+    await walletApi.addEthereumChain(provider, {
       chainId: CHAIN_ID,
       chainName: CHAIN_NAME,
       nativeCurrency: {
@@ -41,7 +41,7 @@ async function ensureGolemBaseChain(provider: EIP1193Provider) {
       rpcUrls: [RPC_ENDPOINT_URL],
     });
 
-    await metamask.switchEthereumChain(provider, CHAIN_ID);
+    await walletApi.switchEthereumChain(provider, CHAIN_ID);
   } catch (error) {
     const mmError: MMError = error as MMError;
     if (!isFauxError(mmError)) {
@@ -93,7 +93,7 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
 
   const handleConnect = async (providerWithInfo: EIP6963ProviderDetail) => {
     try {
-      const accounts = await metamask.requestAccounts(providerWithInfo.provider);
+      const accounts = await walletApi.requestAccounts(providerWithInfo.provider);
       const account = accounts?.[0];
 
       setUserAccount(account);

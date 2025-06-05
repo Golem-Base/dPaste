@@ -58,7 +58,7 @@ async function getTransactionReceipt(provider: EIP1193Provider, transactionId: s
   return GetTransactionReceiptResponseSchema.parse(response);
 }
 
-export const metamask = {
+export const walletApi = {
   addEthereumChain,
   switchEthereumChain,
   requestAccounts,

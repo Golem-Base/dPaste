@@ -3,7 +3,7 @@ import { createClient, EntityMetaData, GolemBaseClient, Hex } from "golem-base-s
 import Browser from "hex-encoding";
 import { Note } from "./note";
 import { z } from "zod/v4";
-import { GetTransactionReceiptResponse } from "@/lib/metamask";
+import { GetTransactionReceiptResponse } from "@/lib/wallet-api";
 
 const DUMMY_PRIVATE_KEY = Browser.decode("08320436da8db8a206e77a918387b8f46afbad57993a5a4bf5bf3ac85bcad74b");
 const GetCurrentBlockNumberResponseSchema = z.object({
