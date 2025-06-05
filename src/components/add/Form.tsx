@@ -38,7 +38,8 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   const [code, setCode] = useState("");
   const confirm = useConfirm();
 
-  const [isPending, startTransition] = useTransition();
+  const [isPending, enterPending] = useTransition();
+  const [isWaitingForTx, enterWaitingForTx] = useTransition();
 
   const addNote = async (data: FormData) => {
     try {
@@ -108,22 +109,8 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
         )
       })
 
-      // Only enter the pending state after all preliminary checks are done so as to avoid
-      // flasing the spinner UI on empty notes etc.
-      startTransition(async () => {
+      const submitToGolemBase = async () => enterWaitingForTx(async () => {
         try {
-          if (!await isConfirmedPromise) {
-            console.debug('Submit cancelled by user');
-            return;
-          }
-
-          console.debug("Using account", userAccount);
-          const resSwitch = await wallet.provider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: CHAIN_ID }],
-          });
-          console.debug("Chain switch response:", resSwitch);
-
           const golemBase = await GolemBaseRw.newRw(wallet.provider);
           const noteId = await golemBase.createNote(note, {
             txHashCallback: (hash) => {
@@ -142,6 +129,27 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
           setError(err);
         }
       });
+
+      // Only enter the pending state after all preliminary checks are done so as to avoid
+      // flasing the spinner UI on empty notes etc.
+      enterPending(async () => {
+        try {
+          if (!await isConfirmedPromise) {
+            console.debug('Submit cancelled by user');
+            return;
+          }
+
+          await submitToGolemBase();
+        } catch (e) {
+          console.error("Add note error:", e);
+          const err =
+            (e instanceof Error || (e instanceof Object && "message" in e)) &&
+              typeof e.message === "string"
+              ? e.message
+              : JSON.stringify(e);
+          setError(err);
+        }
+      });
     } catch (e) {
       console.error("Add note error:", e);
       const err =
@@ -150,7 +158,6 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
           ? e.message
           : JSON.stringify(e);
       setError(err);
-      return;
     }
   }
 
@@ -240,6 +247,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
             </div>}
           {submit({ pending, walletSelected })}
         </div>
+        {isWaitingForTx && <div className={styles.postingLabel}>We are posting your note, please wait</div>}
       </div>
     </form>
   );
