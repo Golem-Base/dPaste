@@ -34,36 +34,38 @@ function NoteView() {
     }
     Note.fetch(id)
       .then((note) => {
-        if (note !== null) {
-          if (note.metadata["encrypted"]) {
-            if (FEATURE_ENCRYPTION_ENABLED) {
-              setState({ type: "encrypted", note });
-            } else {
-              setError("Encrypted notes not supported");
-            }
+        if (note === null) {
+          setState({ type: "missing" });
+          return;
+        }
+        if (note.metadata["encrypted"]) {
+          if (FEATURE_ENCRYPTION_ENABLED) {
+            setState({ type: "encrypted", note });
           } else {
-            setState({ type: "success", note });
+            setError("Encrypted notes not supported");
           }
         } else {
-          setState({ type: "missing" });
+          setState({ type: "success", note });
         }
       })
       .catch((err) => {
         console.error("getEntity error:", err);
-        if (err.error.code === -32000 || err.error.code === -32602) {
-          setError("Note expired or invalid ID provided");
-          setState({ type: "missing" });
-          return;
+
+        switch (err.error?.code) {
+          case -32000:
+          case -32602:
+            setError("Note expired or invalid ID provided");
+            setState({ type: "missing" });
+            return;
+          default:
+            setState({ type: "error" });
+            setError(`Could not load note: ${id}`);
         }
-        /* const e =
-          (err instanceof Error || (err instanceof Object && "message" in err))
-          && typeof err.message === "string"
-          ? err.message : JSON.stringify(err); */
-        setError(`Could not load note: ${id}`);
       });
+
+    console.debug("Note ID:", id);
   }, [id]);
 
-  console.debug("Note ID:", id);
   if (typeof id !== "string" || id === "") {
     console.error("Invalid note ID", id);
     setError("Invalid note ID");

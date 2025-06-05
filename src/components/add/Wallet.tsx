@@ -5,6 +5,7 @@ import styles from "./Wallet.module.scss";
 import layout from "@/styles/Layout.module.scss";
 import Image from "next/image";
 import Disclaimer from "@/components/Disclaimer";
+import { walletApi } from "@/lib/wallet-api";
 
 interface Attrs {
   setError: (error: string) => void;
@@ -29,28 +30,18 @@ function isFauxError(e: MMError): boolean {
 // Debug-logs results. Doesn't propagate faux errors.
 async function ensureGolemBaseChain(provider: EIP1193Provider) {
   try {
-    const resAdd = await provider.request({
-      method: "wallet_addEthereumChain",
-      params: [
-        {
-          chainId: CHAIN_ID,
-          chainName: CHAIN_NAME,
-          nativeCurrency: {
-            decimals: 18,
-            name: CURRENCY_NAME,
-            symbol: CURRENCY_SYMBOL,
-          },
-          rpcUrls: [RPC_ENDPOINT_URL],
-        },
-      ],
+    await walletApi.addEthereumChain(provider, {
+      chainId: CHAIN_ID,
+      chainName: CHAIN_NAME,
+      nativeCurrency: {
+        decimals: 18,
+        name: CURRENCY_NAME,
+        symbol: CURRENCY_SYMBOL,
+      },
+      rpcUrls: [RPC_ENDPOINT_URL],
     });
-    console.debug(resAdd);
 
-    const resSwitch = await provider.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: CHAIN_ID }],
-    });
-    console.debug(resSwitch);
+    await walletApi.switchEthereumChain(provider, CHAIN_ID);
   } catch (error) {
     const mmError: MMError = error as MMError;
     if (!isFauxError(mmError)) {
@@ -81,7 +72,7 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
           await ensureGolemBaseChain(providerWithInfo.provider);
         } catch (error) {
           const mmError: MMError = error as MMError;
-          console.error(error);
+          console.error("Wallet error", error);
           setError(`Code: ${mmError.code} \nError Message: ${mmError.message}`);
         }
       }
@@ -102,10 +93,7 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
 
   const handleConnect = async (providerWithInfo: EIP6963ProviderDetail) => {
     try {
-      const accounts = await providerWithInfo.provider.request({
-        method: "eth_requestAccounts",
-      }) as string[];
-
+      const accounts = await walletApi.requestAccounts(providerWithInfo.provider);
       const account = accounts?.[0];
 
       setUserAccount(account);

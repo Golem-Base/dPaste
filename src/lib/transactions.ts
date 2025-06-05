@@ -1,22 +1,37 @@
-export type TxState =
-  | { type: "pending" }
-  | { type: "complete"; noteId: string; expirationDate: Date };
+import { z } from "zod/v4";
+
+const TRANSACTIONS_LOCAL_STORAGE_KEY = "transactions";
+
+const TxStateSchema = z.union([
+  z.object({
+    type: z.literal("pending"),
+  }),
+  z.object({
+    type: z.literal("complete"),
+    noteId: z.string(),
+    expirationDate: z.string(),
+  }),
+]);
+export type TxState = z.infer<typeof TxStateSchema>;
 
 // tx-id -> TxState
-export type UserTransactions = Record<string, TxState>;
+const UserTransactionsSchema = z.record(z.string(), TxStateSchema);
+export type UserTransactions = z.infer<typeof UserTransactionsSchema>;
 
 // wallet-id -> UserTransactions
-export type TransactionList = Record<string, UserTransactions>;
-
+const TransactionListSchema = z.record(z.string(), UserTransactionsSchema);
+const TransactionListFromJsonStringSchema = z.preprocess((value: any, _ctx) => JSON.parse(value), TransactionListSchema);
+export type TransactionList = z.infer<typeof TransactionListSchema>;
+export type TransactionListFromJsonString = z.infer<typeof TransactionListFromJsonStringSchema>;
 
 export function loadTransactions(): TransactionList {
-  const transactionsStr = localStorage.getItem("transactions");
-  if (transactionsStr) {
-    const transactions = JSON.parse(transactionsStr) as TransactionList;
-    console.debug(transactions);
+  try {
+    const transactions = TransactionListFromJsonStringSchema.parse(localStorage.getItem(TRANSACTIONS_LOCAL_STORAGE_KEY));
     return transactions;
+  } catch (e) {
+    console.error(e);
+    return {};
   }
-  return {};
 }
 
 export function setPending(walletId: string, txId: string) {
@@ -25,14 +40,14 @@ export function setPending(walletId: string, txId: string) {
     transactions[walletId] = {};
   }
   transactions[walletId][txId] = { type: "pending" };
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem(TRANSACTIONS_LOCAL_STORAGE_KEY, JSON.stringify(transactions));
 }
 
-export function setCompleted(walletId: string, txId: string, noteId: string, expirationDate: Date) {
+export function setCompleted(walletId: string, txId: string, noteId: string, expirationDate: string) {
   const transactions = loadTransactions();
   if (!(walletId in transactions)) {
     transactions[walletId] = {};
   }
   transactions[walletId][txId] = { type: "complete", noteId, expirationDate };
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem(TRANSACTIONS_LOCAL_STORAGE_KEY, JSON.stringify(transactions));
 }

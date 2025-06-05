@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { GolemBaseRw } from "@/lib/golem-base";
 import { setPending } from "@/lib/transactions";
+import { walletApi } from "@/lib/wallet-api";
 
 // const CodeEditor = dynamic(
 //   () => import("@uiw/react-textarea-code-editor").then((mod) => mod.default),
@@ -94,11 +95,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
       }
 
       console.debug("Using account", userAccount);
-      const resSwitch = await wallet.provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: CHAIN_ID }],
-      });
-      console.debug("Chain switch response:", resSwitch);
+      await walletApi.switchEthereumChain(wallet.provider, CHAIN_ID);
 
       const golemBase = await GolemBaseRw.newRw(wallet.provider);
       const noteId = await golemBase.createNote(note, {
@@ -110,6 +107,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
       router.push(`/view?id=${noteId}`);
     } catch (e) {
       console.error("Add note error:", e);
+      console.dir(e);
       const err =
         (e instanceof Error || (e instanceof Object && "message" in e)) &&
         typeof e.message === "string"

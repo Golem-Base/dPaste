@@ -28,7 +28,7 @@ importers:
         version: 2.1.1
       golem-base-sdk:
         specifier: ^0.1.13
-        version: 0.1.13(typescript@5.8.3)
+        version: 0.1.13(typescript@5.8.3)(zod@3.25.51)
       hex-encoding:
         specifier: ^2.0.3
         version: 2.0.3
@@ -50,6 +50,9 @@ importers:
       vaul:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      zod:
+        specifier: ^3.25.51
+        version: 3.25.51
     devDependencies:
       '@stylistic/eslint-plugin':
         specifier: ^4.2.0
@@ -2648,6 +2651,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@3.25.51:
+    resolution: {integrity: sha512-TQSnBldh+XSGL+opiSIq0575wvDPqu09AqWe1F7JhUMKY+M91/aGlK4MhpVNO7MgYfHcVCB1ffwAUTJzllKJqg==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -3548,9 +3554,10 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.7.5':
     optional: true
 
-  abitype@1.0.8(typescript@5.8.3):
+  abitype@1.0.8(typescript@5.8.3)(zod@3.25.51):
     optionalDependencies:
       typescript: 5.8.3
+      zod: 3.25.51
 
   acorn-jsx@5.3.2(acorn@8.14.1):
     dependencies:
@@ -4248,11 +4255,11 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.2.0
 
-  golem-base-sdk@0.1.13(typescript@5.8.3):
+  golem-base-sdk@0.1.13(typescript@5.8.3)(zod@3.25.51):
     dependencies:
       '@types/node': 22.15.23
       tslog: 4.9.3
-      viem: 2.30.5(typescript@5.8.3)
+      viem: 2.30.5(typescript@5.8.3)(zod@3.25.51)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -4776,7 +4783,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  ox@0.7.1(typescript@5.8.3):
+  ox@0.7.1(typescript@5.8.3)(zod@3.25.51):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/ciphers': 1.3.0
@@ -4784,7 +4791,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.0.8(typescript@5.8.3)
+      abitype: 1.0.8(typescript@5.8.3)(zod@3.25.51)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.8.3
@@ -5388,15 +5395,15 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  viem@2.30.5(typescript@5.8.3):
+  viem@2.30.5(typescript@5.8.3)(zod@3.25.51):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.0.8(typescript@5.8.3)
+      abitype: 1.0.8(typescript@5.8.3)(zod@3.25.51)
       isows: 1.0.7(ws@8.18.2)
-      ox: 0.7.1(typescript@5.8.3)
+      ox: 0.7.1(typescript@5.8.3)(zod@3.25.51)
       ws: 8.18.2
     optionalDependencies:
       typescript: 5.8.3
@@ -5459,5 +5466,7 @@ snapshots:
   yallist@5.0.0: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.25.51: {}
 
   zwitch@2.0.4: {}
