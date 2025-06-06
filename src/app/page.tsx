@@ -1,7 +1,5 @@
 "use client";
 
-import { ConfirmDialogProvider } from '@omit/react-confirm-dialog'
-
 import { useState } from "react";
 import ErrorMessage from "@/components/ErrorMessage";
 import Form from "@/components/add/Form";
@@ -15,7 +13,7 @@ export default function Add() {
   const [wallet, setWallet] = useState<EIP6963ProviderDetail>();
 
   return (
-    <ConfirmDialogProvider>
+    <>
       <ErrorMessage error={error} setError={setError} />
       <div className={layout.wrapper}>
 
@@ -27,6 +25,6 @@ export default function Add() {
         <Form setError={setError} selectedWallet={wallet} userAccount={user} />
       </div>
       <Transactions walletId={user} provider={wallet?.provider} />
-    </ConfirmDialogProvider>
+    </>
   );
 }

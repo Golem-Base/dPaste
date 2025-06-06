@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import { CustomActionsProps, useConfirm } from '@omit/react-confirm-dialog'
 import { FEATURE_ENCRYPTION_ENABLED, BLOCK_INTERVAL, CHAIN_ID, MAX_NOTE_SIZE } from "@/lib/config";
 import { Language, LANGUAGES } from "@/lib/language";
 import { Note } from "@/lib/note";
@@ -36,10 +35,8 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   const [isFocused, setIsFocused] = useState(false);
   const [enableEncryption, setEnableEncryption] = useState(false);
   const [code, setCode] = useState("");
-  const confirm = useConfirm();
 
   const [isPending, enterPending] = useTransition();
-  const [isWaitingForTx, enterWaitingForTx] = useTransition();
 
   const addNote = async (data: FormData) => {
     try {
@@ -97,19 +94,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
         throw new Error("No wallet selected");
       }
 
-      // The confirmation must be started before entering the transition
-      const isConfirmedPromise = confirm({
-        title: 'Confirmation',
-        description: 'Are you sure you want to submit this note?',
-        customActions: ({ confirm, cancel }: CustomActionsProps) => (
-          <div>
-            <button onClick={confirm}>Submit</button>
-            <button onClick={cancel}>Cancel</button>
-          </div>
-        )
-      })
-
-      const submitToGolemBase = async () => enterWaitingForTx(async () => {
+      enterPending(async () => {
         try {
           const golemBase = await GolemBaseRw.newRw(wallet.provider);
           const noteId = await golemBase.createNote(note, {
@@ -119,27 +104,6 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
           });
           console.debug("Created note:", noteId);
           router.push(`/view?id=${noteId}`);
-        } catch (e) {
-          console.error("Add note error:", e);
-          const err =
-            (e instanceof Error || (e instanceof Object && "message" in e)) &&
-              typeof e.message === "string"
-              ? e.message
-              : JSON.stringify(e);
-          setError(err);
-        }
-      });
-
-      // Only enter the pending state after all preliminary checks are done so as to avoid
-      // flasing the spinner UI on empty notes etc.
-      enterPending(async () => {
-        try {
-          if (!await isConfirmedPromise) {
-            console.debug('Submit cancelled by user');
-            return;
-          }
-
-          await submitToGolemBase();
         } catch (e) {
           console.error("Add note error:", e);
           const err =
@@ -247,7 +211,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
             </div>}
           {submit({ pending, walletSelected })}
         </div>
-        {isWaitingForTx && <div className={styles.postingLabel}>We are posting your note, please wait</div>}
+        {isPending && <div className={styles.postingLabel}>We are posting your note, please wait</div>}
       </div>
     </form>
   );
