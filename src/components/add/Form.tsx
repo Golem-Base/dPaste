@@ -112,7 +112,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
           console.error("Add note error:", e);
           const err =
             (e instanceof Error || (e instanceof Object && "message" in e)) &&
-              typeof e.message === "string"
+            typeof e.message === "string"
               ? e.message
               : JSON.stringify(e);
           setError(err);
@@ -123,12 +123,12 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
       console.dir(e);
       const err =
         (e instanceof Error || (e instanceof Object && "message" in e)) &&
-          typeof e.message === "string"
+        typeof e.message === "string"
           ? e.message
           : JSON.stringify(e);
       setError(err);
     }
-  }
+  };
 
   const walletSelected = selectedWallet !== undefined;
   let noteLenClass;
@@ -222,7 +222,7 @@ export default function Form({ setError, selectedWallet, userAccount }: Attrs) {
   );
 }
 
-function submit({ pending, walletSelected }: { pending: boolean, walletSelected: boolean }) {
+function submit({ pending, walletSelected }: { pending: boolean; walletSelected: boolean }) {
   const disabled = pending || !walletSelected;
 
   let className;
