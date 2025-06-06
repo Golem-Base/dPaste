@@ -1,4 +1,4 @@
-@use '@/styles/variables'as *;
+@use '@/styles/variables' as *;
 
 .add {
   &__form {
@@ -83,8 +83,6 @@
 
     cursor: pointer;
   }
-
-  &__checkbox {}
 }
 
 .lenLabel {
@@ -95,5 +93,39 @@
 
   &__error {
     color: red;
+  }
+}
+
+// TODO
+.postingLabel {
+  font-weight: 700;
+  z-index: 999;
+  position: absolute;
+  color: rgba(24, 30, 168);
+  top: calc(40% + 50px);
+  left: 50%;
+  animation: loading 1s linear infinite;
+
+  @keyframes loading {
+    0% {
+      transform: translate(-50%, -40%) rotate(0deg);
+    }
+
+    80% {
+      transform: translate(-50%, -40%) rotate(0deg);
+    }
+
+    85% {
+      transform: translate(-50%, -40%) rotate(5deg);
+    }
+
+    95% {
+      transform: translate(-50%, -40%) rotate(-5deg);
+    }
+
+    100% {
+      transform: translate(-50%, -40%) rotate(0deg);
+    }
+
   }
 }
