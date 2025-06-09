@@ -207,9 +207,9 @@ async fn add_note(node_url: Url, args: AddArgs) {
         .value(0.try_into().unwrap())
         .to(GOLEM_BASE_STORAGE_PROCESSOR_ADDRESS)
         .input(TransactionInput::new(buf.into()))
-        .with_gas_limit(0x186a0)
-        .with_max_priority_fee_per_gas(0x3b9aca000)
-        .with_max_fee_per_gas(0x2540be4000);
+        .with_gas_limit(0xec58)
+        .with_max_priority_fee_per_gas(0x3b9aca00)
+        .with_max_fee_per_gas(0x2540be400);
 
     let result = provider.send_transaction(tx).await.unwrap();
     let receipt = result.get_receipt().await.unwrap();
@@ -244,9 +244,9 @@ async fn update_note(node_url: Url, args: UpdateArgs) {
         .value(0.try_into().unwrap())
         .to(GOLEM_BASE_STORAGE_PROCESSOR_ADDRESS)
         .input(TransactionInput::new(buf.into()))
-        .with_gas_limit(0x186a0)
-        .with_max_priority_fee_per_gas(0x3b9aca000)
-        .with_max_fee_per_gas(0x2540be4000);
+        .with_gas_limit(0xec58)
+        .with_max_priority_fee_per_gas(0x3b9aca00)
+        .with_max_fee_per_gas(0x2540be400);
 
     let result = provider.send_transaction(tx).await.unwrap();
     let receipt = result.get_receipt().await.unwrap();
@@ -264,9 +264,9 @@ async fn delete_note(node_url: Url, args: DeleteArgs) {
         .value(0.try_into().unwrap())
         .to(GOLEM_BASE_STORAGE_PROCESSOR_ADDRESS)
         .input(TransactionInput::new(buf.into()))
-        .with_gas_limit(0x186a0)
-        .with_max_priority_fee_per_gas(0x3b9aca000)
-        .with_max_fee_per_gas(0x2540be4000);
+        .with_gas_limit(0xec58)
+        .with_max_priority_fee_per_gas(0x3b9aca00)
+        .with_max_fee_per_gas(0x2540be400);
 
     let result = provider.send_transaction(tx).await.unwrap();
     let _receipt = result.get_receipt().await.unwrap();
@@ -285,9 +285,9 @@ async fn extend_note(node_url: Url, args: ExtendArgs) {
         .value(0.try_into().unwrap())
         .to(GOLEM_BASE_STORAGE_PROCESSOR_ADDRESS)
         .input(TransactionInput::new(buf.into()))
-        .with_gas_limit(0x186a0)
-        .with_max_priority_fee_per_gas(0x3b9aca000)
-        .with_max_fee_per_gas(0x2540be4000);
+        .with_gas_limit(0xec58)
+        .with_max_priority_fee_per_gas(0x3b9aca00)
+        .with_max_fee_per_gas(0x2540be400);
 
     let result = provider.send_transaction(tx).await.unwrap();
     let _receipt = result.get_receipt().await.unwrap();
