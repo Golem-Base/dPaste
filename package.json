@@ -15,7 +15,7 @@
     "@uiw/react-textarea-code-editor": "^3.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "golem-base-sdk": "^0.1.13",
+    "golem-base-sdk": "^0.1.15",
     "hex-encoding": "^2.0.3",
     "lucide-react": "^0.511.0",
     "next": "15.3.1",
