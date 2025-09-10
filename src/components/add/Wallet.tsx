@@ -104,9 +104,8 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
         wallet: accounts?.[0],
         provider: providerWithInfo.info.name,
       });
-      console.log("serializedAccount", serializedAccount);
       localStorage.setItem("web3-account", serializedAccount);
-      
+
       await ensureGolemBaseChain(providerWithInfo.provider);
     } catch (error) {
       const mmError: MMError = error as MMError;

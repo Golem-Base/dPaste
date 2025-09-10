@@ -6,9 +6,6 @@ export interface Currency {
   symbol: string;
 }
 
-const AddEthereumChainResponseSchema = z.array(z.string());
-export type AddEthereumChainResponse = z.infer<typeof AddEthereumChainResponseSchema>;
-
 async function addEthereumChain(provider: EIP1193Provider, { chainId, chainName, nativeCurrency, rpcUrls }: { chainId: string; chainName: string; nativeCurrency: Currency; rpcUrls: string[] }) {
   console.log("addEthereumChain params", { chainId, chainName, nativeCurrency, rpcUrls });
   await provider.request({
