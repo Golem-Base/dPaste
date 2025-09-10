@@ -9,7 +9,7 @@ export const CHAIN_NAME = process.env.NEXT_PUBLIC_CHAIN_NAME || "Golem Base L3 T
 export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || "0xE434A";
 export const ANALYTICS_URL = process.env.NEXT_PUBLIC_ANALYTICS_URL || "https://analytics.golem-base.io";
 export const ANALYTICS_SITE_ID = process.env.NEXT_PUBLIC_ANALYTICS_SITE_ID || "";
-export const DOCUMENTATION_URL = process.env.NEXT_PUBLIC_DOCUMENTATION_URL || "";
+export const DOCUMENTATION_URL = process.env.NEXT_PUBLIC_DOCUMENTATION_URL || "https://docs.golemdb.io/";
 export const MAX_NOTE_SIZE = Number(process.env.NEXT_PUBLIC_MAX_NOTE_SIZE || "1024");
 
 // features
