@@ -157,7 +157,7 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
       {userAccount &&
         <div className={styles.faucet}>
           <h2 className={styles.faucet__title}>Need funds?</h2>
-          <div className={styles.faucet__item}>Check out the <a className={styles.faucet__link} href={FAUCET_URL}>Golem Base faucet<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none" /><path fill="#fff" d="M10 6v2H5v11h11v-5h2v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z" /></g></svg></a> to get funds</div>
+          <div className={styles.faucet__item}>Check out the <a className={styles.faucet__link} href={FAUCET_URL}>Golem DB faucet<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none" /><path fill="#fff" d="M10 6v2H5v11h11v-5h2v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6zm11-3v8h-2V6.413l-7.793 7.794-1.414-1.414L17.585 5H13V3h8z" /></g></svg></a> to get funds</div>
         </div>}
     </div>
   );

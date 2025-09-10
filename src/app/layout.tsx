@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </li>
               <li>
                 <a href="https://golem-base.io" target="_blank" rel="noreferrer">
-                  Powered by Golem Base | 2025
+                  Powered by Golem DB | 2025
                 </a>
               </li>
             </ul>

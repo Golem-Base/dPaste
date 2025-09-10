@@ -1,8 +1,8 @@
 # dPaste
 
-dPaste is a simple application showcasing Golem Base DB Chain storage capabilities. To create notes start with connecting the MetaMask browser plugin. Read more at https://glm.zone/golem-base-testnets.
+dPaste is a simple application showcasing Golem DB Chain storage capabilities. To create notes start with connecting the MetaMask browser plugin. Read more at https://glm.zone/golem-base-testnets.
 
-Read more at [Getting Started with Golem Base First Testnet (L2+L3)](https://github.com/Golem-Base/docs/blob/main/README.md)
+Read more at [Getting Started with Golem DB First Testnet (L2+L3)](https://github.com/Golem-Base/docs/blob/main/README.md)
 
 Demo: https://dpaste.golem-base.io
 
