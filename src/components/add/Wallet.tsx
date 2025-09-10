@@ -94,6 +94,7 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
   const handleConnect = async (providerWithInfo: EIP6963ProviderDetail) => {
     try {
       const accounts = await walletApi.requestAccounts(providerWithInfo.provider);
+      console.log("accounts", accounts);
       const account = accounts?.[0];
 
       setUserAccount(account);
@@ -103,8 +104,9 @@ export default function Wallet({ setError, selectedWallet, setSelectedWallet, us
         wallet: accounts?.[0],
         provider: providerWithInfo.info.name,
       });
+      console.log("serializedAccount", serializedAccount);
       localStorage.setItem("web3-account", serializedAccount);
-
+      
       await ensureGolemBaseChain(providerWithInfo.provider);
     } catch (error) {
       const mmError: MMError = error as MMError;

@@ -18,13 +18,13 @@ export const FEATURE_ENCRYPTION_ENABLED =
     process.env.NEXT_PUBLIC_FEATURE_ENCRYPTION_ENABLED === "true";
 
 // constants
-export const KEY_APP_ID = "app-id";
+export const KEY_APP_ID = "app_id";
 export const APP_ID: string = "59c2a455-ee2f-45cb-8e2c-cc74e79f6748";
-export const KEY_COMMON_NAMESPACE = "io.golem-base.dpaste";
-export const KEY_PASTE_CREATED_AT = `${KEY_COMMON_NAMESPACE}.created-at`;
-export const KEY_PASTE_LANGUAGE = `${KEY_COMMON_NAMESPACE}.language`;
-export const KEY_PASTE_VERSION = `${KEY_COMMON_NAMESPACE}.version`;
+export const KEY_COMMON_NAMESPACE = "io_golemdb_dpaste";
+export const KEY_PASTE_CREATED_AT = `${KEY_COMMON_NAMESPACE}_created_at`;
+export const KEY_PASTE_LANGUAGE = `${KEY_COMMON_NAMESPACE}_language`;
+export const KEY_PASTE_VERSION = `${KEY_COMMON_NAMESPACE}_version`;
 export const PASTE_VERSION = "1.0.0";
-export const KEY_PASTE_ENCRYPTED = `${KEY_COMMON_NAMESPACE}.encrypted`;
+export const KEY_PASTE_ENCRYPTED = `${KEY_COMMON_NAMESPACE}_encrypted`;
 export const RPC_TIMEOUT_SECONDS = 30;
 export const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" };

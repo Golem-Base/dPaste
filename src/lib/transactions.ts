@@ -26,8 +26,11 @@ export type TransactionListFromJsonString = z.infer<typeof TransactionListFromJs
 
 export function loadTransactions(): TransactionList {
   try {
-    const transactions = TransactionListFromJsonStringSchema.parse(localStorage.getItem(TRANSACTIONS_LOCAL_STORAGE_KEY));
-    return transactions;
+    const transactions = TransactionListFromJsonStringSchema.safeParse(localStorage.getItem(TRANSACTIONS_LOCAL_STORAGE_KEY));
+    if (!transactions.success) {
+      return {};
+    }
+    return transactions.data;
   } catch (e) {
     console.error(e);
     return {};

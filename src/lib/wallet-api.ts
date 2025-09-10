@@ -10,7 +10,8 @@ const AddEthereumChainResponseSchema = z.array(z.string());
 export type AddEthereumChainResponse = z.infer<typeof AddEthereumChainResponseSchema>;
 
 async function addEthereumChain(provider: EIP1193Provider, { chainId, chainName, nativeCurrency, rpcUrls }: { chainId: string; chainName: string; nativeCurrency: Currency; rpcUrls: string[] }) {
-  AddEthereumChainResponseSchema.parse(await provider.request({
+  console.log("addEthereumChain params", { chainId, chainName, nativeCurrency, rpcUrls });
+  await provider.request({
     method: "wallet_addEthereumChain",
     params: [
       {
@@ -20,7 +21,7 @@ async function addEthereumChain(provider: EIP1193Provider, { chainId, chainName,
         rpcUrls,
       },
     ],
-  }));
+  });
 }
 
 const SwitchEthereumChainResponseSchema = z.null();
